@@ -53,4 +53,11 @@ LNMP包括 Nginx，MySQL和PHP
     然后，设置开机自启动：
     systemctl enable nginx.service 
     
-
+第三步-安装php7.0
+    （一）
+    apt-get install php7.0-fpm php7.0-cgi php7.0-common php7.0-curl php7.0-mysql php7.0-mcrypt
+    php7.0-sqlite3 php7.0-bz2 php7.0-mysqli php7.0-mysqlnd php7.0-opcache php7.0-pdo php7.0-phar 
+    php7.0-sockets php7.0-xml
+    后面的扩展按需安装。
+    
+    然后打开/etc/php/7.0/fpm/php.ini， 找到cgi.fix_pathinfo 并将其值设为cgi.fix_pathinfo=0
