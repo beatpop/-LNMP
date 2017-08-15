@@ -1,1 +1,43 @@
 LNMP包括 Nginx，MySQL和PHP 
+
+安装之前先更新Ubuntu的软件，更新系统
+    apt update 、 apt upgrade 
+    
+第一步先安装MySQL： 
+    （一）
+    apt-get install mysql-server mysql-client libmysqlclient-dev 
+    
+    安装的过程中，会出现让你设置root的密码，设置好，OK，一直到安装完。
+    
+    安装完之后，可以检测一下是否安装成功： 
+    netstat -tap | grep mysql  
+    成功的话会出现状态：   tcp        0      0 localhost:mysql         *:*                     LISTEN      1256/mysqld 
+    不同的系统可能会有不一样的显示。
+    
+    （二）其他相关操作
+    登录 mysql -uroot -p
+    检查MySQL服务器占用端口 netstat -nlt|grep 3306
+    检查MySQL服务器系统进程 ps -aux|grep mysql
+    查看数据库的字符集编码 show variables like '%char%';
+    
+    （三）设置MySQL服务器能被远程访问（重要） 
+    cd /etc/mysql/mysql.conf.d/  、 vim mysqld.cnf
+    将 bind-address           = 127.0.0.1 注释。
+   
+    （四）设置字符编码 
+    打开 /etc/mysql/mysql.conf.d/mysqld.cnf 
+    在[mysqld] 下加上 character-set-server=utf8 
+    
+    打开 /etc/mysql/conf.d/mysql.cnf 
+    在[mysql]下加上 default-character-set=utf8 
+    
+    （五）重启mysql服务器，上面的设置才会生效   
+    /etc/init.d/mysql restart  
+    
+    (六)设置root用户或者新建其他用户，并设置权限，在远程时可以登录MySQL。
+    如，设置root用户，
+    登录mysql -uroot -p后，再执行命令：
+    grant all privileges on *.* to 'root'@'%' identified by 'xxxxxx';
+    flush privileges;
+    
+    
