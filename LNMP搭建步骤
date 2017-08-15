@@ -76,7 +76,7 @@ LNMP包括 Nginx，MySQL和PHP
 
 		# 项目目录
         root /var/www/testweb;
-        index.php index index.html index.htm;
+        index index.php index.html index.htm;
 
 		#日志目录
 		access_log /var/www/testweb/logs/access.log;
