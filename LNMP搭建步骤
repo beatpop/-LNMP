@@ -33,6 +33,9 @@ LNMP包括 Nginx，MySQL和PHP
     
     （五）重启mysql服务器，上面的设置才会生效   
     /etc/init.d/mysql restart  
+    查看是否设置好远程： 
+    netstat -tap | grep mysql 看下面的状态（与上面的对比localhost是本地）：
+    tcp6       0      0 [::]:mysql              [::]:*                  LISTEN      1498/mysqld 
     
     (六)设置root用户或者新建其他用户，并设置权限，在远程时可以登录MySQL。
     如，设置root用户，
@@ -41,3 +44,13 @@ LNMP包括 Nginx，MySQL和PHP
     flush privileges;
     
     
+第二步安装Nginx： 
+    apt-get install nginx 
+    安装完后，先运行： 
+    /etc/init.d/nginx start 
+    通过虚拟主机设置的ip访问即可，如http://192.168.56.132/ 
+    
+    然后，设置开机自启动：
+    systemctl enable nginx.service 
+    
+
