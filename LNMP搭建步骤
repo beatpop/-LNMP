@@ -61,3 +61,52 @@ LNMP包括 Nginx，MySQL和PHP
     后面的扩展按需安装。
     
     然后打开/etc/php/7.0/fpm/php.ini， 找到cgi.fix_pathinfo 并将其值设为cgi.fix_pathinfo=0
+    
+
+最后，上面的软件全部安装完了，那么可以根据个人的项目设置Nginx虚拟主机了。
+一般项目的文件是放在 /var/www/目录下，具体项目具体目录。我自己建立了一个测试目录 /var/www/testweb  
+
+下面是Nginx虚拟主机配置： 
+    （一）打开/etc/nginx/sites-available , 新建一个 testphp.app文件，并保存。然后里面内容是：
+    server {
+        listen 80;
+        listen [::]:80;
+
+        server_name testphp.app;
+
+		# 项目目录
+        root /var/www/testweb;
+        index.php index index.html index.htm;
+
+		#日志目录
+		access_log /var/www/testweb/logs/access.log;
+
+        error_log /var/www/testweb/logs/error.log;
+
+        location / {
+                # try_files $uri $uri/ =404;
+				try_files $uri $uri/ /index.php$is_args$args;
+        }
+
+        location ~ \.php$ {
+                include snippets/fastcgi-php.conf;
+
+                # With php7.0-cgi alone:
+                # fastcgi_pass 127.0.0.1:9000;
+                # With php7.0-fpm:
+                fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+        }
+    }
+    
+    （二）通过软连接：
+    ln -s /etc/nginx/sites-available/testphp.app /etc/nginx/sites-enabled/testphp.app
+    通过上述指令将文件快捷方式到 /etc/nginx/sites-enabled
+    
+    （三）修改本地hosts文件，一般是在 “C:\Windows\System32\drivers\etc” 下面。 
+    在host文件后面添加，我设置的虚拟机地址IP为 192.168.56.132， 则添加 192.168.56.132    testphp.app 保存。
+    
+    （四）重启服务器
+    service nginx restart service php7.0-fpm restart 
+    重启后，即可在本地浏览器中访问 http://testphp.app （即 /var/www/testweb下的内容了）
+    
+    #最后，本人也是通过网上的一些资料，再根据自己的情况进行摸索，若有误，请指正，大家互相学习，谢谢！ peace & love。
